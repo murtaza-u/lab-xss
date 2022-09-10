@@ -34,7 +34,7 @@ func create(ctx echo.Context) error {
 	}
 	defer db.Conn.Close()
 
-	id, err := id.NewID()
+	p.ID, err = id.NewID()
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, resp{
 			Err: err.Error(),
@@ -48,7 +48,7 @@ func create(ctx echo.Context) error {
 		})
 	}
 
-	err = db.Put(id, v)
+	err = db.Put(p.ID, v)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, resp{
 			Err: err.Error(),

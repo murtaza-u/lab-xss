@@ -21,6 +21,7 @@ type resp struct {
 }
 
 type post struct {
+	ID       string    `json:"id"`
 	Username string    `json:"username"`
 	Date     time.Time `json:"date"`
 	Content  string    `json:"content"`
@@ -34,9 +35,12 @@ func Init(e *echo.Echo, env map[string]string) {
 		SigningKey: []byte(env["JWT_SECRET"]),
 	}
 
+	mid := middleware.JWTWithConfig(cfg)
+
 	grp := e.Group("/post")
 	grp.GET("/getall", retrieve)
-	grp.POST("/create", create, middleware.JWTWithConfig(cfg))
+	grp.POST("/create", create, mid)
+	grp.DELETE("/delete/:id", delete, mid)
 }
 
 func (p post) encode() ([]byte, error) {

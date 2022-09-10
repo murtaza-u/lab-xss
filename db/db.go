@@ -93,3 +93,12 @@ func (db *DB) Exists(key string) bool {
 
 	return exists
 }
+
+func (db *DB) Delete(key string) error {
+	err := db.Conn.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(db.bucket))
+		return b.Delete([]byte(key))
+	})
+
+	return err
+}
