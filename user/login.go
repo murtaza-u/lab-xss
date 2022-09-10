@@ -27,13 +27,13 @@ func login(ctx echo.Context) error {
 	}
 	defer db.Conn.Close()
 
-	if !db.Exists([]byte(uname)) {
+	if !db.Exists(uname) {
 		return ctx.JSON(http.StatusBadRequest, resp{
 			Err: "invalid credentials",
 		})
 	}
 
-	hash := db.Get([]byte(uname))
+	hash := db.Get(uname)
 	if hash == nil {
 		return ctx.JSON(http.StatusInternalServerError, resp{
 			Err: "an internal error occured",
@@ -46,7 +46,7 @@ func login(ctx echo.Context) error {
 		})
 	}
 
-	claims := &claims{
+	claims := &Claims{
 		uname,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 6).Unix(),

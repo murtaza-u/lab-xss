@@ -29,7 +29,7 @@ func Init(bucket, file string) (*DB, error) {
 	return &DB{Conn: db, bucket: bucket}, nil
 }
 
-func (db *DB) Get(key []byte) []byte {
+func (db *DB) Get(key string) []byte {
 	var value []byte
 
 	db.Conn.View(func(tx *bolt.Tx) error {
@@ -37,7 +37,7 @@ func (db *DB) Get(key []byte) []byte {
 		c := b.Cursor()
 
 		for k, v := c.First(); k != nil; k, v = c.Next() {
-			if bytes.Compare(key, k) == 0 {
+			if bytes.Compare([]byte(key), k) == 0 {
 				value = v
 				break
 			}
@@ -49,16 +49,32 @@ func (db *DB) Get(key []byte) []byte {
 	return value
 }
 
-func (db *DB) Put(key, value []byte) error {
+func (db *DB) GetAll() map[string][]byte {
+	data := make(map[string][]byte)
+
+	db.Conn.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(db.bucket))
+		b.ForEach(func(k, v []byte) error {
+			data[string(k)] = v
+			return nil
+		})
+
+		return nil
+	})
+
+	return data
+}
+
+func (db *DB) Put(key string, value []byte) error {
 	err := db.Conn.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(db.bucket))
-		return b.Put(key, value)
+		return b.Put([]byte(key), value)
 	})
 
 	return err
 }
 
-func (db *DB) Exists(key []byte) bool {
+func (db *DB) Exists(key string) bool {
 	var exists bool
 
 	db.Conn.View(func(tx *bolt.Tx) error {
@@ -66,7 +82,7 @@ func (db *DB) Exists(key []byte) bool {
 		c := b.Cursor()
 
 		for k, _ := c.First(); k != nil; k, _ = c.Next() {
-			if bytes.Compare(key, k) == 0 {
+			if bytes.Compare([]byte(key), k) == 0 {
 				exists = true
 				break
 			}

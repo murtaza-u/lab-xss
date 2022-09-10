@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+	"github.com/murtaza-u/lab-xss/post"
 	"github.com/murtaza-u/lab-xss/user"
 )
 
@@ -43,7 +44,8 @@ func main() {
 	env := loadENV()
 
 	e := echo.New()
-	user.InitUser(e, env)
+	user.Init(e, env)
+	post.Init(e, env)
 
 	err := e.Start(":" + env["PORT"])
 	if err != nil {

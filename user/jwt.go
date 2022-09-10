@@ -2,7 +2,7 @@ package user
 
 import "github.com/golang-jwt/jwt"
 
-type claims struct {
+type Claims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }

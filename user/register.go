@@ -34,7 +34,7 @@ func register(ctx echo.Context) error {
 	}
 	defer db.Conn.Close()
 
-	err = db.Put([]byte(uname), h)
+	err = db.Put(uname, h)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, resp{
 			Err: err.Error(),
