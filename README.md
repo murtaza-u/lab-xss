@@ -45,12 +45,12 @@ go build -o lab-xss cmd/lab-xss/main.go
 ```bash
 export JWT_SECRET="$(head -c 50 /dev/urandom | base64)"
 export PORT=8080
-lab-xss app
+./lab-xss app
 ```
 
 * Starting the attacker
 
 ```bash
 export ATTACKER_PORT=5000
-lab-xss attack
+./lab-xss attack
 ```
