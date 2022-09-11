@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/murtaza-u/lab-xss/db"
+	"github.com/murtaza-u/lab-xss/user"
 )
 
 func delete(ctx echo.Context) error {
@@ -23,6 +25,17 @@ func delete(ctx echo.Context) error {
 		})
 	}
 	defer db.Conn.Close()
+
+	tkn := ctx.Get("user").(*jwt.Token)
+	claims := tkn.Claims.(*user.Claims)
+
+	p := new(post)
+	p.decode(db.Get(id))
+	if p.Username != claims.Username {
+		return ctx.JSON(http.StatusUnauthorized, resp{
+			Err: "unauthorized",
+		})
+	}
 
 	err = db.Delete(id)
 	if err != nil {

@@ -7,6 +7,24 @@ import (
 	"github.com/murtaza-u/lab-xss/db"
 )
 
+func sortByTime(posts []post) []post {
+	n := len(posts)
+
+	for i := 0; i < n-1; i++ {
+		for j := 0; j < n-1-i; j++ {
+			if posts[j].Date.Sub(posts[j+1].Date) > 0 {
+				continue
+			}
+
+			temp := posts[j]
+			posts[j] = posts[j+1]
+			posts[j+1] = temp
+		}
+	}
+
+	return posts
+}
+
 func retrieve(ctx echo.Context) error {
 	db, err := db.Init(postBuck, dbFile)
 	if err != nil {
@@ -30,6 +48,8 @@ func retrieve(ctx echo.Context) error {
 
 		posts = append(posts, *p)
 	}
+
+	posts = sortByTime(posts)
 
 	return ctx.JSON(http.StatusCreated, resp{
 		Data:    posts,

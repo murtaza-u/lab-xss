@@ -82,7 +82,7 @@ func (db *DB) Exists(key string) bool {
 		c := b.Cursor()
 
 		for k, _ := c.First(); k != nil; k, _ = c.Next() {
-			if bytes.Compare([]byte(key), k) == 0 {
+			if key == string(k) {
 				exists = true
 				break
 			}

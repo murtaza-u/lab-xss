@@ -46,10 +46,12 @@ func login(ctx echo.Context) error {
 		})
 	}
 
+	exp := time.Now().Add(time.Hour * 6)
+
 	claims := &Claims{
 		uname,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 6).Unix(),
+			ExpiresAt: exp.Unix(),
 		},
 	}
 
@@ -61,6 +63,15 @@ func login(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+
+	cookie := new(http.Cookie)
+	cookie.Name = "token"
+	cookie.Value = tknStr
+	cookie.Expires = exp
+	cookie.Path = "/"
+	// cookie.Secure = true
+	// cookie.Domain = "10.0.0.11"
+	ctx.SetCookie(cookie)
 
 	return ctx.JSON(http.StatusOK, resp{
 		Success: true,

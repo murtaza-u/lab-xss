@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <title>XSS</title>
+    </head>
+    <body>
+        <div id="alerts"></div>
+
+        <nav class="navbar navbar-expand-lg bg-light mb-5">
+            <div class="container-fluid">
+                <a id="nav-username" class="navbar-brand" href="#"></a>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a id="nav-register" class="nav-link" aria-current="page" href="#">Register</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a id="nav-login" class="nav-link" href="#">Login</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a id="nav-posts" class="nav-link" href="#">Posts</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" id="nav-logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <form id="register" class="container">
+            <h2 class="m-2">Register</h2>
+
+            <div class="input-group my-3">
+                <input type="text" class="form-control" id="register-username" placeholder="username">
+            </div>
+
+            <div class="input-group my-3">
+                <input type="password" class="form-control" id="register-password" placeholder="password">
+            </div>
+
+            <div class="input-group my-3">
+                <input type="password" class="form-control" id="register-confirm-password" placeholder="confirm password">
+            </div>
+
+            <button type="submit" class="btn btn-primary my-3">Register</button>
+        </form>
+
+        <form id="login" class="container">
+            <h2 class="m-2">Login</h2>
+
+            <div class="input-group my-3">
+                <input type="text" class="form-control" id="login-username" placeholder="username">
+            </div>
+
+            <div class="input-group my-3">
+                <input type="password" class="form-control" id="login-password" placeholder="password">
+            </div>
+
+            <button type="submit" class="btn btn-primary my-3">Login</button>
+        </form>
+
+        <main class="container">
+            <h2>Posts</h2>
+
+            <form id="new">
+                <textarea></textarea>
+                <button type="submit" class="btn btn-primary my-3">Post</button>
+            </form>
+
+            <div id="posts"></div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+                crossorigin="anonymous"></script>
+        <script src="init.js"></script>
+        <script src="posts.js"></script>
+        <script src="alert.js"></script>
+        <script src="cookie.js"></script>
+        <script src="request.js"></script>
+        <script src="nav.js"></script>
+        <script src="form.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>

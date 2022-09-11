@@ -19,13 +19,6 @@ func register(ctx echo.Context) error {
 		})
 	}
 
-	h, err := hash([]byte(passwd))
-	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, resp{
-			Err: err.Error(),
-		})
-	}
-
 	db, err := db.Init(userBuck, dbFile)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, resp{
@@ -33,6 +26,19 @@ func register(ctx echo.Context) error {
 		})
 	}
 	defer db.Conn.Close()
+
+	if db.Exists(uname) {
+		return ctx.JSON(http.StatusBadRequest, resp{
+			Err: "username taken",
+		})
+	}
+
+	h, err := hash([]byte(passwd))
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, resp{
+			Err: err.Error(),
+		})
+	}
 
 	err = db.Put(uname, h)
 	if err != nil {
